@@ -3,6 +3,7 @@ const app = express()
 const route = require('./route/route')
 const port = 3000
 
+app.use(express.json())
 app.use(route)
 app.use(function(error,req,res,next) {
     console.log(error)
