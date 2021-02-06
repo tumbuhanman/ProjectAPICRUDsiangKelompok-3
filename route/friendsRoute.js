@@ -7,7 +7,7 @@
 
 const express = require('express')
 const app = express.Router()
-const db = require('./dbFriends')//jangan lupa diganti
+const db = require('./dbFriend')//jangan lupa diganti
 const { body, validationResult } = require('express-validator');
 const regLetterAndSpace = /^[a-zA-Z\s]*$/;
 const regLetterAndNumber = /^[a-z0-9]+$/i;
