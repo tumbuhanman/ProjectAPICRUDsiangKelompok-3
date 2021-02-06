@@ -11,6 +11,7 @@ app.get('/',(req,res) => {
 })
 app.post('/register',cekRegister,(req,res) => {
     const errors = validationResult(req);
+    let nilai =0
     if (!errors.isEmpty()) {
       return res.status(400).json({
           status: false,
@@ -29,30 +30,46 @@ app.post('/register',cekRegister,(req,res) => {
     })
 })
 app.post('/login',(req,res) => {  
-    for (let index = 0; index < users.length; index++) {
-        const email = users[index].email;
-        const pass = users[index].password;
+
+    const datauser = users.length
+    console.log(datauser);
+    var index=0 
+    let status =false
+    while(index < users.length) {
+        let email = users[index].email;
+        let pass = users[index].password;
+        // if(index == 1){
+        //     console.log(req.body.email)
+        //     console.log(email)
+
+        //     console.log(req.body.password)
+        //     console.log(pass)
+        // }
         if(email == req.body.email && pass == req.body.password){
-            res.send("login berhasil")
-        }else{
-            res.send('email atau password salah')
-        }      
-      
+            status = true
+            break
+        }
+        index++ 
+    } 
+    if(status) {
+        res.send("login berhasil")
+    }else{
+        res.send("email dan password anda salah silahkan coba lagi")
     }
+    // for (let index = 0; index < users.length; index++) {
+    //     const email = users[index].email;
+    //     const pass = users[index].password;
+    //     if(index == 1){
+    //         res.send(email,pass,req.body.email,req.body.password)
+    //     }
+    //     if(email == req.body.email && pass == req.body.password){
+    //         res.send("login berhasil")
+    //     }else{
+    //         res.send('email atau password salah')
+    //     }      
+      
+    // }
     
 })
-// winda
-
-// 
-
-//wildan
-
-// 
-
-//yanuar
-
-//
-
-
 
 module.exports = app
