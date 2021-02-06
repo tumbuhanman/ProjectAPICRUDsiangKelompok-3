@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express.Router()
-const users = require('../models/user.js')
+const users = require('../models/dbUser.js')
 const {cekRegister} = require('../validation')
 const {validationResult} = require('express-validator')
 const user = require('../models/user.js')
@@ -34,8 +34,6 @@ app.post('/login',(req,res) => {
         const pass = users[index].password;
         if(email == req.body.email && pass == req.body.password){
             res.send("login berhasil")
-            res.send(email)
-            res.send(pass)
         }else{
             res.send('email atau password salah')
         }      

@@ -1,20 +1,20 @@
 module.exports = [
     {
        id : "122",
-       email: "ninanina@gmail.com",
        username: "ninanina",
+       email: "ninanina@gmail.com",
        password: "Bulan123",
     },
     {
         id : "233",
-        email: "ninasakinah@gmail.com",
         username: "sakinahnina",
+        email: "ninasakinah@gmail.com",
         password: "Matahari5",
     },
     {
         id : "477",
-        email: "sakinahshahab@gmail.com",
         username: "sakinahsha",
+        email: "sakinahshahab@gmail.com",
         password: "Bintang78",
     }
  
