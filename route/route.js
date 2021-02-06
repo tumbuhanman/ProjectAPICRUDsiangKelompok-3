@@ -1,16 +1,34 @@
 const express = require('express')
 const app = express.Router()
-const user = require('../models/user')
+const users = require('../models/user.js')
+const {cekRegister} = require('../validation')
+const {validationResult} = require('express-validator')
 
 //ikhwan
 app.get('/',(req,res) => {
-    res.send(user)
+    res.send(users)
 })
-app.get('/register',(req,res) => {
-    res.send("welcome")
+app.post('/register',cekRegister,(req,res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+          status: false,
+          message: errors.array()[0].msg
+      })  
+    }
+    const register = {
+        id : req.body.id,
+        username: req.body.username,
+        email : req.body.email,
+        password: req.body.password
+    }
+    users.push(register)
+    res.status(200).json({
+        message : "berhasil registrasi",
+    })
 })
-app.get('/login',(req,res) => {
-    res.send("welcome")
+app.post('/login',(req,res) => {
+    res.send(users)
 })
 // winda
 
