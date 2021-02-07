@@ -67,7 +67,7 @@ app.post('/item', (req, res) => {
 
 app.put('/item/:id', (req, res) => {
     const param = req.params.id
-    const { id, userId, name } = req.body
+    const { userId, name } = req.body
 
     if (getItem(param)) {
         if (getUserId(userId).length == 0) {
@@ -75,13 +75,13 @@ app.put('/item/:id', (req, res) => {
         }
 
         else {
-            if (id && userId && name) {
-                items[getItemIndex(param)] = dbStructure(id, userId, name)
-                res.send(dbStructure(id, userId, name))
+            if (userId && name) {
+                items[getItemIndex(param)] = dbStructure(param, userId, name)
+                res.send(dbStructure(param, userId, name))
             }
 
             else {
-                res.status(400).send("Please write something")
+                res.status(400).send("Please check your input")
             }
         }
     }
