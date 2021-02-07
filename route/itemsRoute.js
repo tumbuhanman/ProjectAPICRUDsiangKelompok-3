@@ -44,9 +44,14 @@ app.get('/item/:id', (req, res) => {
 
 app.post('/item', (req, res) => {
     const { id, userId, name } = req.body
+    const data = req.body
 
     if (getItem(id)) {
         res.status(400).send("There is similar Id, please change the input value")
+    }
+
+    else if (Object.keys(data).length == 0) {
+        res.status(400).send("Please write something")
     }
 
     else if (getUserId(userId).length == 0) {
@@ -68,9 +73,14 @@ app.post('/item', (req, res) => {
 app.put('/item/:id', (req, res) => {
     const param = req.params.id
     const { userId, name } = req.body
+    const data = req.body
 
     if (getItem(param)) {
-        if (getUserId(userId).length == 0) {
+        if (Object.keys(data).length == 0) {
+            res.status(400).send("Please write something")
+        }
+
+        else if (getUserId(userId).length == 0) {
             res.status(400).send("There is no similar userId, please change the input value")
         }
 
