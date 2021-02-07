@@ -133,35 +133,35 @@ app.get('/friends/:idFriends', function (req, res, next) {
 
 
 //method post/send new data by structure in dbFriends 
-app.post('/friends', (req, res) => {
-    const {
-        id,
-        userId,
-        name
-    } = req.body
+// app.post('/friends', (req, res) => {
+//     const {
+//         id,
+//         userId,
+//         name
+//     } = req.body
 
-    if (id && userId && name && Number(id) && Number(userId) && regLetterAndSpace.test(name)) { //db statis jadi id harus ditulis
-        const data = db.filter(x => x.id == id);
+//     if (id && userId && name && Number(id) && Number(userId) && regLetterAndSpace.test(name)) { //db statis jadi id harus ditulis
+//         const data = db.filter(x => x.id == id);
 
-        if (data.length > 0) { //ketika data sudah memiliki id yang sama berarti maka data sudah ada
-            res.status(400).send("Id is already exist")
-        }
-        const dataUserId = db.filter(x => x.userId == userId)
+//         if (data.length > 0) { //ketika data sudah memiliki id yang sama berarti maka data sudah ada
+//             res.status(400).send("Id is already exist")
+//         }
+//         const dataUserId = db.filter(x => x.userId == userId)
 
-        if (dataUserId.length > 0) {
-            res.status(400).send("UserId is already Used")
-        } else { //ketika id belum ada yang sama
-            db.push(req.body);
-            res.send(req.body);
-        }
-    } else {
-        res.status(400).send("Data is invalid, please make sure your input");
-    }
-})
+//         if (dataUserId.length > 0) {
+//             res.status(400).send("UserId is already Used")
+//         } else { //ketika id belum ada yang sama
+//             db.push(req.body);
+//             res.send(req.body);
+//         }
+//     } else {
+//         res.status(400).send("Data is invalid, please make sure your input");
+//     }
+// })
 
 
 //method post/send new data by structure in dbFriends by random Id
-app.post('/friends/randomId', (req, res) => {
+app.post('/friends', (req, res) => {
     const {
         userId,
         name
