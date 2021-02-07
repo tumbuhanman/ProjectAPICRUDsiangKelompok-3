@@ -91,10 +91,12 @@ app.get('/friends/all/:id', function (req, res, next) {
             }
             res.send(object);
         }
+        
         else {
             res.send("Data not found")
         }
     }
+    
     else {
         res.send("Data not found")
     }
@@ -116,7 +118,9 @@ app.post('/friends', (req, res) => {
         const dataUserId = db.filter(x => x.userId == userId)
         if (dataUserId.length == 0) {
             res.status(400).send("UserId unavailable")
-        } else { //ketika id belum ada yang sama dan mengubah ke random id
+        } 
+        
+        else { //ketika id belum ada yang sama dan mengubah ke random id
             var object = {
                 id: id.toString(),
                 userId: userId,
@@ -125,7 +129,9 @@ app.post('/friends', (req, res) => {
             db.push(object);
             res.send(req.body);
         }
-    } else {
+    } 
+    
+    else {
         res.status(400).send("Data is invalid, please make sure your input");
     }
 })
