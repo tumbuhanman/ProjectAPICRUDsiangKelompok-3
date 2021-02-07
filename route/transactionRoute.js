@@ -1,5 +1,8 @@
 const express = require('express')
 const app = express.Router()
+const userDB = require('../models/dbUser')
+const friendDB = require('../models/dbFriend')
+const itemDB = require('../models/dbItem')
 const transactionDB = require('../models/dbTransaction')
 
 function getId(param) {
@@ -13,8 +16,18 @@ function getTransactionIndex(param) {
 }
 
 function getUserId(param) {
-    const UserId = transactionDB.filter(UserId => UserId.userId === param)
-    return UserId
+    const user = userDB.filter(user => user.id === param)
+    return user
+}
+
+function getFriendId(param) {
+    const friend = friendDB.filter(friend => friend.id === param)
+    return friend
+}
+
+function getItemId(param) {
+    const item = itemDB.filter(item => item.id === param)
+    return item
 }
 
 // TRANSACTION GET
@@ -24,23 +37,26 @@ app.get('/transaction', (req,res) => {
 
 // TRANSACTION GET by ID
 app.get('/transaction/:id', (req,res) => {
-    const idparam = req.params.id
-    const id = getId(idparam)
-    if (!id) {
-        res.send("Data tidak ditemukan")
+    const param = req.params.id
+    if (!getId(param)) {
+        res.status(404).send("Data tidak ditemukan")
     } else {
-        res.send(id)
+        res.send(getId(param))
     }
 })
 
 //TRANSACTION POST
 app.post('/transaction', (req, res) => {
-    const { id, userId } = req.body
+    const { id, userId, friendId, itemId } = req.body
 
     if (getId(id)) {
-        res.status(400).send("Terdapat data dengan ID yang sama pada Basisdata")
+        res.status(400).send("Gagal. Terdapat transaksi dengan ID yang sama pada Basisdata")
     } else if (getUserId(userId).length == 0) {
-        res.status(400).send("Tidak ditemukan userId yang sama pada Basisdata")
+        res.status(400).send("Gagal. UserID tidak ditemukan pada Basisdata")
+    } else if (getFriendId(friendId).length == 0) {
+        res.status(400).send("Gagal. FriendID tidak ditemukan pada Basisdata")
+    } else if (getItemId(itemId).length == 0) {
+        res.status(400).send("Gagal. ItemID tidak ditemukan pada Basisdata")
     } else {
         transactionDB.push(req.body)
         res.send(req.body)
@@ -48,24 +64,31 @@ app.post('/transaction', (req, res) => {
 })
 
 // TRANSACTION PUT
-app.put('/transaction/:id', (req, res) => {
-    const idparam = req.params.id
-    const {userId} = req.body
-    if (!getId(idparam)) {
+app.put('/transaction', (req, res) => {
+    const { id, userId, friendId, itemId } = req.body
+    if (!getId(id)) {
         res.status(400).send("Gagal. Tidak ditemukan Id Transaksi yang sama pada Basisdata")
     } else if (getUserId(userId).length == 0) {
-        res.status(400).send("Gagal. Tidak ditemukan userId yang sama pada Basisdata")
+        res.status(400).send("Gagal. UserID tidak ditemukan pada Basisdata")
+    } else if (getFriendId(friendId).length == 0) {
+        res.status(400).send("Gagal. FriendID tidak ditemukan pada Basisdata")
+    } else if (getItemId(itemId).length == 0) {
+        res.status(400).send("Gagal. ItemID tidak ditemukan pada Basisdata")
     } else {
-        transactionDB[getTransactionIndex(idparam)] = req.body
+        transactionDB[getTransactionIndex(id)] = req.body
         res.send(req.body)
     }
 })
 
 //TRANSACTION DELETE
 app.delete('/transaction/:id', (req, res) => {
-    const idparam = req.params.id
-    const deletedItem = transactionDB.splice(getTransactionIndex(idparam), 1)
-    res.send(deletedItem)
+    const param = req.params.id
+    if (getId(param)) {
+        const deletedItem = transactionDB.splice((getId(param)), 1)
+        res.send(deletedItem)
+    } else {
+        res.send('Gagal. ID tidak ditemukan')
+    }
 })
 
 module.exports = app
