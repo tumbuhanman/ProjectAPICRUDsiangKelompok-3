@@ -176,8 +176,8 @@ app.post('/friends/randomId', (req, res) => {
         }
 
         const dataUserId = db.filter(x => x.userId == userId)
-        if (dataUserId.length > 0) {
-            res.status(400).send("UserId is already Used")
+        if (dataUserId.length == 0) {
+            res.status(400).send("UserId unavailable")
         } else { //ketika id belum ada yang sama dan mengubah ke random id
             var object = {
                 id: id.toString(),
