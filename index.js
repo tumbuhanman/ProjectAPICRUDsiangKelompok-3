@@ -8,10 +8,10 @@ const friends = require('./route/friendsRoute')
 
 app.use(express.json())
 app.use(route, transaction, item, friends)
-// app.use(function(error,req,res,next) {
-//     console.log(error)
-//     res.status(500).send(error,message)
-// })
+app.use(function(error,req,res,next) {
+     console.log(error)
+    res.status(500).send(error,message)
+ })
 app.listen(port, () => {
   console.log(`Server on at http://localhost:${port}`)
 })
