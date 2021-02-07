@@ -1,17 +1,17 @@
 module.exports = [
     {
-       id : "123",
-       userId : "nina25",
+       id : "1",
+       userId : "122",
        name : "Nina",
     },
     {
-        id : "456",
-       userId : "winda38",
+        id : "2",
+       userId : "233",
        name : "Winda",
     },
     {
-        id : "567",
-       userId : "Yanuar88",
+        id : "3",
+       userId : "477",
        name : "Yanuar",
     }
  

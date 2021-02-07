@@ -7,9 +7,12 @@
 
 const express = require('express')
 const app = express.Router()
-const db = require('./dbFriends')//jangan lupa diganti
-const dbUsers = require('./dbUsers')//jangan lupa diganti
-const { body, validationResult } = require('express-validator');
+const db = require('../models/dbFriend') //jangan lupa diganti
+const dbUsers = require('../models/dbUser') //jangan lupa diganti
+const {
+    body,
+    validationResult
+} = require('express-validator');
 const regLetterAndSpace = /^[a-zA-Z\s]*$/;
 const regLetterAndNumber = /^[a-z0-9]+$/i;
 
@@ -36,7 +39,7 @@ app.get('/friends/all', function (req, res, next) {
 })
 
 
-//method get all data with dbUsers and dbFriends 
+//method get all different data with dbUsers and dbFriends 
 app.get('/friends/alldata', function (req, res, next) {
     var array = []
     for (var friends of db) {
@@ -52,9 +55,7 @@ app.get('/friends/alldata', function (req, res, next) {
                 password: dbUsers[index].password
             }
             array.push(object) //push ke dalam array
-        }
-
-        else {//push semua data di dbFriends tanpa kecuali
+        } else { //push semua data di dbFriends tanpa kecuali
 
             var object = { //mapping data baru sebagai object, definisi values
                 id: friends.id,
@@ -92,12 +93,10 @@ app.get('/friends/all/:id', function (req, res, next) {
                 password: dbUsers[usersIndex].password
             }
             res.send(object);
-        }
-        else {
+        } else {
             res.send("Data not found")
         }
-    }
-    else {
+    } else {
         res.send("Data not found")
     }
 })
@@ -107,9 +106,7 @@ app.get('/friends/all/:id', function (req, res, next) {
 app.get('/friends', function (req, res, next) {
     if (db.length == 0) {
         res.send("Data is empty")
-    }
-
-    else {
+    } else {
         res.send(db);
     }
 })
@@ -127,9 +124,7 @@ app.get('/friends/:idFriends', function (req, res, next) {
     const data = db.filter(x => x.id == id);
     if (data.length > 0) {
         res.send(data);
-    }
-
-    else {
+    } else {
         res.status(400).send("Data is undefined")
     }
 })
@@ -137,7 +132,11 @@ app.get('/friends/:idFriends', function (req, res, next) {
 
 //method post/send new data by structure in dbFriends 
 app.post('/friends', (req, res) => {
-    const { id, userId, name } = req.body
+    const {
+        id,
+        userId,
+        name
+    } = req.body
 
     if (id && userId && name && Number(id) && Number(userId) && regLetterAndSpace.test(name)) { //db statis jadi id harus ditulis
         const data = db.filter(x => x.id == id);
@@ -149,15 +148,11 @@ app.post('/friends', (req, res) => {
 
         if (dataUserId.length > 0) {
             res.status(400).send("UserId is already Used")
-        }
-
-        else { //ketika id belum ada yang sama
+        } else { //ketika id belum ada yang sama
             db.push(req.body);
             res.send(req.body);
         }
-    }
-
-    else {
+    } else {
         res.status(400).send("Data is invalid, please make sure your input");
     }
 })
@@ -165,7 +160,10 @@ app.post('/friends', (req, res) => {
 
 //method post/send new data by structure in dbFriends by random Id
 app.post('/friends/randomId', (req, res) => {
-    const { userId, name } = req.body
+    const {
+        userId,
+        name
+    } = req.body
     var id = Math.floor(Math.random() * 100);
     // var id = Math.floor(Math.random() * (999 - 100 + 1) + 100);
     if (userId && name && Number(userId) && regLetterAndSpace.test(name)) { //db statis jadi id harus ditulis
@@ -178,16 +176,16 @@ app.post('/friends/randomId', (req, res) => {
         const dataUserId = db.filter(x => x.userId == userId)
         if (dataUserId.length > 0) {
             res.status(400).send("UserId is already Used")
-        }
-
-        else { //ketika id belum ada yang sama dan mengubah ke random id
-            var object = { id: id.toString(), userId: userId, name: name }
+        } else { //ketika id belum ada yang sama dan mengubah ke random id
+            var object = {
+                id: id.toString(),
+                userId: userId,
+                name: name
+            }
             db.push(object);
             res.send(req.body);
         }
-    }
-
-    else {
+    } else {
         res.status(400).send("Data is invalid, please make sure your input");
     }
 })
@@ -195,7 +193,10 @@ app.post('/friends/randomId', (req, res) => {
 
 //method put/update data with specific idFriends
 app.put('/friends/:id', (req, res) => {
-    const { userId, name } = req.body //bisa ditambah userId bila dibutuhkan make koma 
+    const {
+        userId,
+        name
+    } = req.body //bisa ditambah userId bila dibutuhkan make koma 
     //const { name } = req.body //bisa ditambah userId bila dibutuhkan make koma 
     const id = req.params.id
 
@@ -206,21 +207,17 @@ app.put('/friends/:id', (req, res) => {
 
     //if ditambah menggunakan && 
     // if (userId && name && regLetterAndSpace.test(name) && Number(userId)) {//mengubah nama, bisa ditambah userId jika diperlukan 
-    if (userId && name && Number(userId) && regLetterAndSpace.test(name)) {//mengubah nama dan angka bisa ditambah userId jika diperlukan 
+    if (userId && name && Number(userId) && regLetterAndSpace.test(name)) { //mengubah nama dan angka bisa ditambah userId jika diperlukan 
         const index = db.findIndex(x => x.id == id); //filter untuk mendapatkan data dengan id sesuai yang dicari 
 
         if (index >= 0) {
             db[index].userId = userId;
             db[index].name = name;
             res.send(db[index])
-        }
-
-        else {
+        } else {
             res.status(400).send("Data is undefined")
         }
-    }
-
-    else {
+    } else {
         res.status(400).send("Data is invalid")
     }
 })
@@ -228,23 +225,22 @@ app.put('/friends/:id', (req, res) => {
 
 //method put/update data with specific idUsers
 app.put('/friends', (req, res) => {
-    const { userId, name } = req.body //bisa ditambah userId bila dibutuhkan make koma 
+    const {
+        userId,
+        name
+    } = req.body //bisa ditambah userId bila dibutuhkan make koma 
 
-    if (userId && name && Number(userId) && regLetterAndSpace.test(name)) {//mengubah nama dan angka bisa ditambah userId jika diperlukan 
+    if (userId && name && Number(userId) && regLetterAndSpace.test(name)) { //mengubah nama dan angka bisa ditambah userId jika diperlukan 
         const index = db.findIndex(x => x.userId == userId); //filter untuk mendapatkan data dengan id sesuai yang dicari 
 
         if (index >= 0) {
             db[index].userId = userId;
             db[index].name = name;
             res.send(db[index])
-        }
-
-        else {
+        } else {
             res.status(400).send("Data is undefined")
         }
-    }
-
-    else {
+    } else {
         res.status(400).send("Data is invalid")
     }
 })
@@ -262,9 +258,7 @@ app.delete('/friends/:id', (req, res) => {
     if (index >= 0) {
         const deleteItem = db.splice(index, 1)
         res.send(deleteItem)
-    }
-
-    else {
+    } else {
         res.status(400).send("Data is undefined")
     }
 })
