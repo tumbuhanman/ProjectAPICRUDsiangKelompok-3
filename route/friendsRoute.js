@@ -74,6 +74,7 @@ app.get('/friends/alldata', function (req, res, next) {
 
 //method get all same data with dbUsers and dbFriends by Id
 app.get('/friends/all/:id', function (req, res, next) {
+    const id = req.params.id
     if (!Number(id)) {
         res.status(400).send("Please input parameter by number")
     }
@@ -115,11 +116,12 @@ app.get('/friends', function (req, res, next) {
 //method get data by Id with dbFriends
 app.get('/friends/:idFriends', function (req, res, next) {
     //let id = Number(req.params.id); //number 
-    let id = req.params.id; //string
+    const id = req.params.id; //string
 
     if (!Number(id)) {
         res.status(400).send("Please input parameter by number")
     }
+
 
     const data = db.filter(x => x.id == id);
     if (data.length > 0) {
