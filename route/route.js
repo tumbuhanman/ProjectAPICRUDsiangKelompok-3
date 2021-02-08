@@ -11,7 +11,8 @@ app.get('/',(req,res) => {
 })
 app.post('/register',cekRegister,(req,res) => {
     const errors = validationResult(req);
-    let nilai =0
+    let status = false
+    var index = 0
     if (!errors.isEmpty()) {
       return res.status(400).json({
           status: false,
@@ -19,20 +20,38 @@ app.post('/register',cekRegister,(req,res) => {
       })  
     }
     const register = {
-        id : Math.floor(Math.random() * 100),
+        id : req.body.id,
         username: req.body.username,
         email : req.body.email,
         password: req.body.password
     }
-    users.push(register)
-    res.status(200).json({
-        message : "berhasil registrasi",
-    })
+
+    while(index < users.length) {
+        let email = users[index].email
+        let username = users[index].username
+        let id = users[index].id
+
+        if(email == req.body.email && id == req.body.id && username == req.body.username){
+            status = true
+            break
+        }
+        index++
+    }
+
+    if(status){
+        res.send("id, username, atau email tidak boleh sama")
+    }else{
+        users.push(register)
+        res.send("berhasil registrasi")
+    }
+
+
+    
 })
 app.post('/login',(req,res) => {  
 
     const datauser = users.length
-    console.log(datauser);
+    //console.log(datauser);
     var index=0 
     let status =false
     while(index < users.length) {
