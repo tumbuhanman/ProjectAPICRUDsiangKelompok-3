@@ -49,13 +49,13 @@ function dbStructure(a, b, c, d, e) {
 
 // TRANSACTION GET
 // menampilkan isi basisdata Transaction
-app.get('/transaction', (req,res) => {
+app.get('/transaction', (req, res) => {
     res.send(transactionDB)
 })
 
 // TRANSACTION GET by ID
 // menampilkan isi basisdata Transaction berdasarkan ID yang dimasukkan
-app.get('/transaction/:id', (req,res) => {
+app.get('/transaction/:id', (req, res) => {
     const param = req.params.id
     if (!getId(param)) {
         res.status(404).send("Data tidak ditemukan")
@@ -120,7 +120,7 @@ app.put('/transaction', (req, res) => {
 app.delete('/transaction', (req, res) => {
     const { id } = req.body
     if (getId(id)) {
-        const deletedItem = transactionDB.splice((getId(id)), 1)
+        const deletedItem = transactionDB.splice((getTransactionIndex(id)), 1)
         res.send(deletedItem)
     } else {
         res.send('Gagal. Data tidak ditemukan')

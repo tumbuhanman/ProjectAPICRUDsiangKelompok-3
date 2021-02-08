@@ -1,28 +1,28 @@
 const express = require('express')
 const app = express.Router()
 const users = require('../models/dbUser.js')
-const {cekRegister} = require('../validation')
-const {validationResult} = require('express-validator')
+const { cekRegister } = require('../validation')
+const { validationResult } = require('express-validator')
 const user = require('../models/user.js')
 
 //ikhwan
-app.get('/',(req,res) => {
+app.get('/', (req, res) => {
     res.send(users)
 })
-app.post('/register',cekRegister,(req,res) => {
+app.post('/register', cekRegister, (req, res) => {
     const errors = validationResult(req);
     let status = false
     var index = 0
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-          status: false,
-          message: errors.array()[0].msg
-      })  
+        return res.status(400).json({
+            status: false,
+            message: errors.array()[0].msg
+        })
     }
     const register = {
         id : req.body.id,
         username: req.body.username,
-        email : req.body.email,
+        email: req.body.email,
         password: req.body.password
     }
 
@@ -48,13 +48,20 @@ app.post('/register',cekRegister,(req,res) => {
 
     
 })
-app.post('/login',(req,res) => {  
+app.post('/login', (req, res) => {
 
     const datauser = users.length
+<<<<<<< HEAD
     //console.log(datauser);
     var index=0 
     let status =false
     while(index < users.length) {
+=======
+    // console.log(datauser);
+    var index = 0
+    let status = false
+    while (index < users.length) {
+>>>>>>> 1080da4ff694bd8892bf8274df06345b25899593
         let email = users[index].email;
         let pass = users[index].password;
         // if(index == 1){
@@ -64,15 +71,15 @@ app.post('/login',(req,res) => {
         //     console.log(req.body.password)
         //     console.log(pass)
         // }
-        if(email == req.body.email && pass == req.body.password){
+        if (email == req.body.email && pass == req.body.password) {
             status = true
             break
         }
-        index++ 
-    } 
-    if(status) {
+        index++
+    }
+    if (status) {
         res.send("login berhasil")
-    }else{
+    } else {
         res.send("email dan password anda salah silahkan coba lagi")
     }
     // for (let index = 0; index < users.length; index++) {
@@ -86,9 +93,9 @@ app.post('/login',(req,res) => {
     //     }else{
     //         res.send('email atau password salah')
     //     }      
-      
+
     // }
-    
+
 })
 
 module.exports = app
