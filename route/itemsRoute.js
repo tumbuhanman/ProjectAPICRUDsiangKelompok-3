@@ -31,10 +31,10 @@ app.get('/item', (req, res) => {
 })
 
 app.get('/item/:id', (req, res) => {
-    const param = req.params.id
+    const id = req.params.id
 
-    if (getItem(param)) {
-        res.send(getItem(param))
+    if (getItem(id)) {
+        res.send(getItem(id))
     }
 
     else {
@@ -70,12 +70,11 @@ app.post('/item', (req, res) => {
     }
 })
 
-app.put('/item/:id', (req, res) => {
-    const param = req.params.id
-    const { userId, name } = req.body
+app.put('/item', (req, res) => {
+    const { id, userId, name } = req.body
     const data = req.body
 
-    if (getItem(param)) {
+    if (getItem(id)) {
         if (Object.keys(data).length == 0) {
             res.status(400).send("Please write something")
         }
@@ -86,8 +85,8 @@ app.put('/item/:id', (req, res) => {
 
         else {
             if (userId && name) {
-                items[getItemIndex(param)] = dbStructure(param, userId, name)
-                res.send(dbStructure(param, userId, name))
+                items[getItemIndex(id)] = dbStructure(id, userId, name)
+                res.send(dbStructure(id, userId, name))
             }
 
             else {
@@ -101,11 +100,11 @@ app.put('/item/:id', (req, res) => {
     }
 })
 
-app.delete('/item/:id', (req, res) => {
-    const param = req.params.id
+app.delete('/item', (req, res) => {
+    const { id } = req.body
 
-    if (getItem(param)) {
-        const deletedItem = items.splice(getItemIndex(param), 1)
+    if (getItem(id)) {
+        const deletedItem = items.splice(getItemIndex(id), 1)
         res.send(deletedItem)
     }
 
