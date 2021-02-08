@@ -4,7 +4,6 @@ const userDB = require('../models/dbUser')
 const friendDB = require('../models/dbFriend')
 const itemDB = require('../models/dbItem')
 const transactionDB = require('../models/dbTransaction')
-const e = require('express')
 
 
 // FUNCTION 
