@@ -7,14 +7,15 @@
 
 const express = require('express')
 const app = express.Router()
-const db = require('../models/dbFriend')//jangan lupa diganti
-const dbUsers = require('../models/dbUser')//jangan lupa diganti
+const db = require('./models/dbFriend')//jangan lupa diganti
+const dbUsers = require('./models/dbUser')//jangan lupa diganti
 const { body, validationResult } = require('express-validator');
+const dbUser = require('./models/dbUser');
 const regLetterAndSpace = /^[a-zA-Z\s]*$/;
 const regLetterAndNumber = /^[a-z0-9]+$/i;
 
 
-//method get only same data in dbUser and dbFriend
+//method get only same data in dbUsers and dbFriends 
 app.get('/friends/all', function (req, res, next) {
     var array = []
     for (var friends of db) {
@@ -36,7 +37,7 @@ app.get('/friends/all', function (req, res, next) {
 })
 
 
-//method get data only in dbFriend
+//method get data only in dbFriends
 app.get('/friends', function (req, res, next) {
     if (db.length == 0) {
         res.send("Data is empty")
@@ -48,10 +49,10 @@ app.get('/friends', function (req, res, next) {
 })
 
 
-//method get data only in dbFriend by Id 
+//method get data only in dbFriends by Id 
 app.get('/friends/:id', function (req, res, next) {
     //let id = Number(req.params.id); //number 
-    let id = req.params.idFriends; //string
+    let id = req.params.id; //string
 
     if (!Number(id)) {
         res.status(400).send("Please input parameter by number")
@@ -68,7 +69,7 @@ app.get('/friends/:id', function (req, res, next) {
 })
 
 
-//method get data only by Id dbUser
+//method get all data by Id dbFriends
 app.get('/friends/all/:id', function (req, res, next) {
     const id = req.params.id
     if (!Number(id)) {
@@ -91,32 +92,31 @@ app.get('/friends/all/:id', function (req, res, next) {
             }
             res.send(object);
         }
-
         else {
             res.send("Data not found")
         }
     }
-
     else {
         res.send("Data not found")
     }
 })
 
 
-//method post/send new data by structure in dbFriend by random Id
+//method post/send new data by structure in dbFriends by random Id
 app.post('/friends', (req, res) => {
     const { userId, name } = req.body
     var id = Math.floor(Math.random() * 100);
     // var id = Math.floor(Math.random() * (999 - 100 + 1) + 100);
     if (userId && name && Number(userId) && regLetterAndSpace.test(name)) { //db statis jadi id harus ditulis
         const data = db.filter(x => x.id == id.toString());
+        const dataUserId = dbUsers.filter(x => x.id == userId)
+        const dataFriendId = db.filter(x => x.id == id)
 
-        if (data.length > 0) { //ketika data sudah memiliki id yang sama berarti maka data sudah ada
+        if (data.length > 0) { //ketika data sudah memiliki id yang sama maka data sudah ada
             res.status(400).send("Id is already exist")
         }
 
-        const dataUserId = db.filter(x => x.userId == userId)
-        if (dataUserId.length == 0) {
+        else if (dataUserId.length == 0) {
             res.status(400).send("UserId unavailable")
         }
 
@@ -129,9 +129,7 @@ app.post('/friends', (req, res) => {
             db.push(object);
             res.send(req.body);
         }
-    }
-
-    else {
+    } else {
         res.status(400).send("Data is invalid, please make sure your input");
     }
 })
@@ -140,7 +138,6 @@ app.post('/friends', (req, res) => {
 //method put/update data with specific idFriend
 app.put('/friends/:id', (req, res) => {
     const { name } = req.body //bisa ditambah userId bila dibutuhkan make koma 
-    //const { name } = req.body //bisa ditambah userId bila dibutuhkan make koma 
     const id = req.params.id
 
     //check apakah path berupa number atau bukan
@@ -152,9 +149,14 @@ app.put('/friends/:id', (req, res) => {
         const index = db.findIndex(x => x.id == id); //filter untuk mendapatkan data dengan id sesuai yang dicari 
 
         if (index >= 0) {
-            //db[index].id = id;
-            db[index].name = name;
-            res.send(db[index])
+            if (id != req.body.id) {
+                res.send("Id is invalid, please make sure your Id")
+            }
+            else {
+                db[index].name = name;
+                res.send(db[index])
+
+            }
         }
 
         else {
@@ -168,7 +170,7 @@ app.put('/friends/:id', (req, res) => {
 })
 
 
-//method delete/menghapus data dengan specific idFriend
+//method delete/menghapus data dengan specific idFriends
 app.delete('/friends/:id', (req, res) => {
     let id = req.params.id; //number
     //check apakah path berupa number atau bukan
