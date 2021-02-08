@@ -51,7 +51,7 @@ app.get('/friends', function (req, res, next) {
 //method get data only in dbFriends by Id 
 app.get('/friends/:idFriends', function (req, res, next) {
     //let id = Number(req.params.id); //number 
-    let id = req.params.id; //string
+    let id = req.params.idFriends; //string
 
     if (!Number(id)) {
         res.status(400).send("Please input parameter by number")
@@ -91,12 +91,12 @@ app.get('/friends/all/:id', function (req, res, next) {
             }
             res.send(object);
         }
-        
+
         else {
             res.send("Data not found")
         }
     }
-    
+
     else {
         res.send("Data not found")
     }
@@ -118,8 +118,8 @@ app.post('/friends', (req, res) => {
         const dataUserId = db.filter(x => x.userId == userId)
         if (dataUserId.length == 0) {
             res.status(400).send("UserId unavailable")
-        } 
-        
+        }
+
         else { //ketika id belum ada yang sama dan mengubah ke random id
             var object = {
                 id: id.toString(),
@@ -129,8 +129,8 @@ app.post('/friends', (req, res) => {
             db.push(object);
             res.send(req.body);
         }
-    } 
-    
+    }
+
     else {
         res.status(400).send("Data is invalid, please make sure your input");
     }
