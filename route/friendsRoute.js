@@ -14,7 +14,7 @@ const regLetterAndSpace = /^[a-zA-Z\s]*$/;
 const regLetterAndNumber = /^[a-z0-9]+$/i;
 
 
-//method get only same data in dbUsers and dbFriends 
+//method get only same data in dbUser and dbFriend
 app.get('/friends/all', function (req, res, next) {
     var array = []
     for (var friends of db) {
@@ -36,7 +36,7 @@ app.get('/friends/all', function (req, res, next) {
 })
 
 
-//method get data only in dbFriends
+//method get data only in dbFriend
 app.get('/friends', function (req, res, next) {
     if (db.length == 0) {
         res.send("Data is empty")
@@ -48,8 +48,8 @@ app.get('/friends', function (req, res, next) {
 })
 
 
-//method get data only in dbFriends by Id 
-app.get('/friends/:idFriends', function (req, res, next) {
+//method get data only in dbFriend by Id 
+app.get('/friends/:id', function (req, res, next) {
     //let id = Number(req.params.id); //number 
     let id = req.params.idFriends; //string
 
@@ -68,7 +68,7 @@ app.get('/friends/:idFriends', function (req, res, next) {
 })
 
 
-//method get data only by Id dbFriends
+//method get data only by Id dbUser
 app.get('/friends/all/:id', function (req, res, next) {
     const id = req.params.id
     if (!Number(id)) {
@@ -103,7 +103,7 @@ app.get('/friends/all/:id', function (req, res, next) {
 })
 
 
-//method post/send new data by structure in dbFriends by random Id
+//method post/send new data by structure in dbFriend by random Id
 app.post('/friends', (req, res) => {
     const { userId, name } = req.body
     var id = Math.floor(Math.random() * 100);
@@ -137,7 +137,7 @@ app.post('/friends', (req, res) => {
 })
 
 
-//method put/update data with specific idFriends
+//method put/update data with specific idFriend
 app.put('/friends/:id', (req, res) => {
     const { name } = req.body //bisa ditambah userId bila dibutuhkan make koma 
     //const { name } = req.body //bisa ditambah userId bila dibutuhkan make koma 
@@ -168,7 +168,7 @@ app.put('/friends/:id', (req, res) => {
 })
 
 
-//method delete/menghapus data dengan specific idFriends
+//method delete/menghapus data dengan specific idFriend
 app.delete('/friends/:id', (req, res) => {
     let id = req.params.id; //number
     //check apakah path berupa number atau bukan
