@@ -20,48 +20,41 @@ app.post('/register', cekRegister, (req, res) => {
         })
     }
     const register = {
-        id : req.body.id,
+        id: req.body.id,
         username: req.body.username,
         email: req.body.email,
         password: req.body.password
     }
 
-    while(index < users.length) {
+    while (index < users.length) {
         let email = users[index].email
         let username = users[index].username
         let id = users[index].id
 
-        if(email == req.body.email && id == req.body.id && username == req.body.username){
+        if (email == req.body.email && id == req.body.id && username == req.body.username) {
             status = true
             break
         }
         index++
     }
 
-    if(status){
+    if (status) {
         res.send("id, username, atau email tidak boleh sama")
-    }else{
+    } else {
         users.push(register)
         res.send("berhasil registrasi")
     }
 
 
-    
+
 })
 app.post('/login', (req, res) => {
 
     const datauser = users.length
-<<<<<<< HEAD
-    //console.log(datauser);
-    var index=0 
-    let status =false
-    while(index < users.length) {
-=======
     // console.log(datauser);
     var index = 0
     let status = false
     while (index < users.length) {
->>>>>>> 1080da4ff694bd8892bf8274df06345b25899593
         let email = users[index].email;
         let pass = users[index].password;
         // if(index == 1){
