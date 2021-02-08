@@ -102,8 +102,13 @@ app.put('/item', (req, res) => {
 
 app.delete('/item', (req, res) => {
     const { id } = req.body
+    const data = req.body
 
-    if (getItem(id)) {
+    if (Object.keys(data).length == 0) {
+        res.status(400).send("Please write something")
+    }
+
+    else if (getItem(id)) {
         const deletedItem = items.splice(getItemIndex(id), 1)
         res.send(deletedItem)
     }
