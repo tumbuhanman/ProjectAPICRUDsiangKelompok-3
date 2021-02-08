@@ -10,7 +10,6 @@ app.use(express.json())
 app.use(route, transaction, item, friends)
 
 app.use(function (error, req, res, next) {
-  console.log(error)
   res.status(500).send("Error : ", error.message)
 })
 
